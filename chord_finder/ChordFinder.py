@@ -154,6 +154,19 @@ def analyze(user_input):
                                                  unknown,
                                                  req_minimum_distance)
 
+            # Look beyond 12th only if we're looking at the 4th member of
+            # the chord and nothing is found below the 12th. If this is not
+            # done, then ['c', 'e', 'g', 'd'] will be identified as 'C
+            # Major 9th'] twice. The first time will happen because 'd'
+            # will be already looked up beyond the 12th semitone.
+            #
+            # With Major 13th (e.g.: 'c', 'e', 'g', 'a'), the 'a' will be
+            # found below the 12th, but it's not a known chord and so it
+            # won't be added and unless we check beyond the 12th, we won't
+            # find the 13th chord.
+            #
+            # In other words, we need to look beyond the 12th only if it
+            # has not been done already.
             if j == 3 and distance < 13:
                 beyond_12th = get_distance_in_semitones(root,
                                                         unknown,
