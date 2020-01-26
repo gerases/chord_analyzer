@@ -5,8 +5,30 @@ import sys
 import re
 from itertools import permutations
 
-PITCHES = ['c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#', 'a', 'a#', 'b']
+PITCHES = ['c', 'c+', 'd', 'd+', 'e', 'f', 'f+', 'g', 'g+', 'a', 'a+', 'b']
 MAX_DISTANCE = 40
+
+
+def parse_input(st):
+    i = 0
+    result = []
+    allowed_chars = re.compile('[a-gA-G+-]')
+    a_to_g_re = re.compile('[a-gA-G]')
+    last_char_pos = -1
+    while i < len(st):
+        char = st[i]
+        if not allowed_chars.match(char):
+            raise Exception("Illegal char at position %s [%s]" % (i, char))
+        if a_to_g_re.match(char):
+            result.append(char)
+            last_char_pos = len(result) - 1
+        else:
+            if last_char_pos < 0:
+                raise Exception("Error parsing input at position %s [%s]" %
+                                (i, char))
+            result[last_char_pos] = result[last_char_pos] + char
+        i += 1
+    return result
 
 
 def dec_to_musical(distance):
@@ -33,7 +55,7 @@ def move_in_half_steps(pitch, accidentals):
     # start from the given pitch
     result = pitch
     for accidental in accidentals:
-        if accidental == '#':
+        if accidental == '+':
             if result == 'b':
                 result = 'c'
             else:
@@ -56,10 +78,10 @@ def get_distance_in_semitones(a, b, req_min_distance=-1):
 
     distance = 0
     while start != end:
-        start = move_in_half_steps(start, '#')
+        start = move_in_half_steps(start, '+')
         distance += 1
         if start == end and distance < req_min_distance:
-            start = move_in_half_steps(start, '#')
+            start = move_in_half_steps(start, '+')
             distance += 1
     return distance
 
@@ -91,7 +113,9 @@ def analyze(user_input):
     #
     # First, turn the input into an array if it's a string
     if type(user_input).__name__ == 'str':
-        user_input = re.split(r'\s+', user_input.strip())
+        user_input = parse_input(user_input)
+    else:
+        user_input = parse_input(''.join(user_input))
 
     rex = re.compile('[a-gA-G][#b]*')
     for item in user_input:
@@ -126,13 +150,14 @@ def analyze(user_input):
         beyond_12th = None
         while j < len_user_input:
             unknown = permutation[j]
-            if j == 3:
-                beyond_12th = get_distance_in_semitones(root,
-                                                        unknown,
-                                                        13)
             distance = get_distance_in_semitones(root,
                                                  unknown,
                                                  req_minimum_distance)
+
+            if j == 3 and distance < 13:
+                beyond_12th = get_distance_in_semitones(root,
+                                                        unknown,
+                                                        13)
 
             req_minimum_distance = distance + 1
             distances.append(str(dec_to_musical(distance)))
