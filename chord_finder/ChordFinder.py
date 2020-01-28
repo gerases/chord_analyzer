@@ -5,8 +5,57 @@ import sys
 import re
 from itertools import permutations
 
-PITCHES = ['c', 'c+', 'd', 'd+', 'e', 'f', 'f+', 'g', 'g+', 'a', 'a+', 'b']
+
+DISTANCE_TO_NAME = {
+    1: 'minor second',
+    2: 'major second',
+    3: 'minor third',
+    4: 'major third',
+    5: 'perfect fourth',
+    6: 'diminished fifth',
+    7: 'perfect fifth',
+    8: 'minor sixth',
+    9: 'major sixth',
+    'a': 'minor seventh',     # 10
+    'b': 'major seventh',     # 11
+    'e': 'major ninth',       # 14
+    'h': 'major eleventh',    # 17
+    'l': 'major thirteenth',  # 21
+}
+
+PITCHES = ['c', 'c+', 'd', 'd+', 'e', 'f', 'f+', 'g', 'g+', 'a', 'a+',
+           'b']
 MAX_DISTANCE = 40
+
+SHARP_TO_FLAT = {
+    'c+': 'd-',
+    'd+': 'e-',
+    'e+': 'f-',
+    'f+': 'g-',
+    'g+': 'a-',
+    'a+': 'b-',
+}
+
+
+def distances_to_symbols(root, distances, mode):
+    """Returns a string representation of the chord
+    based on the given distances from the root
+    """
+    result = [root]
+    root = move_in_half_steps(root[0:1], root[1:])
+    pitch_index = PITCHES.index(root)
+    pitches_max_index = len(PITCHES) - 1
+    for distance in distances:
+        pitch_index_at_distance = pitch_index + musical_to_dec(distance)
+        if pitch_index_at_distance > pitches_max_index:
+            pitch_index_at_distance =\
+                pitch_index_at_distance - pitches_max_index - 1
+        pitch = PITCHES[pitch_index_at_distance]
+        if mode == 'flat' and len(pitch) > 1:
+            result.append(SHARP_TO_FLAT[pitch])
+        else:
+            result.append(PITCHES[pitch_index_at_distance])
+    return ''.join(result)
 
 
 def parse_input(st):
@@ -29,6 +78,15 @@ def parse_input(st):
             result[last_char_pos] = result[last_char_pos] + char
         i += 1
     return result
+
+
+def musical_to_dec(distance):
+    """Converts musical distances (e.g.: 1, 2, a, b) to decimal integers"""
+
+    chr_code = ord(distance)
+    if chr_code >= 97:
+        return chr_code - 97 + 10
+    return int(distance)
 
 
 def dec_to_musical(distance):
@@ -85,27 +143,6 @@ def get_distance_in_semitones(a, b, req_min_distance=-1):
             distance += 1
     return distance
 
-distance_to_name = {
-    1: 'minor second',
-    2: 'major second',
-    3: 'minor third',
-    4: 'major third',
-    5: 'perfect fourth',
-    6: 'diminished fifth',
-    7: 'perfect fifth',
-    8: 'minor sixth',
-    9: 'major sixth',
-    'a': 'minor seventh',     # 10
-    'b': 'major seventh',     # 11
-    'e': 'major ninth',       # 14
-    'h': 'major eleventh',    # 17
-    'l': 'major thirteenth',  # 21
-}
-
-
-def get_distance_name(semitones):
-    return distance_to_name[semitones]
-
 
 # pylint: disable=too-many-locals
 def analyze(user_input):
@@ -116,6 +153,11 @@ def analyze(user_input):
         user_input = parse_input(user_input)
     else:
         user_input = parse_input(''.join(user_input))
+
+    mode = 'sharp'
+    for char in user_input:
+        if '-' in char:
+            mode = 'flat'
 
     rex = re.compile('[a-gA-G][#b]*')
     for item in user_input:
@@ -140,7 +182,7 @@ def analyze(user_input):
         '47l': 'major 13th',
     }
     perms = permutations(user_input)
-    possibles = []
+    possibles = {}
     for permutation in list(perms):
         distances = []
         root = permutation[0]
@@ -177,13 +219,14 @@ def analyze(user_input):
             j += 1
         pattern = ''.join(distances)
         if pattern in patterns:
-            possibles.append("%s %s" % (root.capitalize(), patterns[pattern]))
+            possibles["%s %s" % (root.capitalize(), patterns[pattern])] =\
+                distances_to_symbols(root, distances, mode)
         if beyond_12th:
             distances[2] = str(dec_to_musical(beyond_12th))
             pattern = ''.join(distances)
             if pattern in patterns:
-                possibles.append("%s %s" % (root.capitalize(),
-                                            patterns[pattern]))
+                possibles["%s %s" % (root.capitalize(), patterns[pattern])] =\
+                    distances_to_symbols(root, distances, mode)
     return possibles
 
 
@@ -196,6 +239,6 @@ if __name__ == '__main__':
     if len(possibilities) < 1:
         print "Nothing found for %s" % request
         sys.exit(1)
-    for possibility in possibilities:
-        print possibility
+    for possibility, symbols in possibilities.items():
+        print "%s [%s]" % (possibility, symbols)
     sys.exit(1)
