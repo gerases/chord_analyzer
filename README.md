@@ -13,6 +13,9 @@ are distinguished:
 * Minor 7th
 * Half diminished 7th
 * Diminished 7th
+* Major "add" 9th
+* Major "add" 11th
+* Major "add" 13th
 
 For now, the input must be given as as a quoted string with pitch names
 separated by spaces.
@@ -20,25 +23,25 @@ separated by spaces.
 # Examples
 
 ```
-$ ./ChordFinder.py 'a c e'
+$ ./ChordFinder.py 'ace'
 A minor
 
-$ ./ChordFinder.py 'a c# e'
+$ ./ChordFinder.py 'ac+e'
 A major
 
-$ ./ChordFinder.py 'a c eb g'
+$ ./ChordFinder.py 'ace-g'
 A half diminished 7th
 
-$ ./ChordFinder.py 'a c e g'
+$ ./ChordFinder.py 'aceg'
 A minor 7th
 
-$ ./ChordFinder.py 'a c# e g#'
+$ ./ChordFinder.py 'ac+eg+'
 A major 7th
 
-$ ./ChordFinder.py 'a c# e g'
+$ ./ChordFinder.py 'ac+eg'
 A dominant 7th
 
-$ ./ChordFinder.py 'a c eb gb'
+$ ./ChordFinder.py 'ace-g-'
 A diminished 7th
 C diminished 7th
 Eb diminished 7th
@@ -47,6 +50,5 @@ Gb diminished 7th
 
 # TODO
 
-* Recognize more chrod types (e.g. suspended, 9, 11, 13, etc)
 * Require fewer and not necessarily consecutive chars to start the analysis
 * Accept input on stdin
