@@ -145,7 +145,7 @@ def get_distance_in_semitones(a, b, req_min_distance=-1):
 
 
 # pylint: disable=too-many-locals
-def analyze(user_input):
+def analyze(user_input, permute=True):
     # Validate input
     #
     # First, turn the input into an array if it's a string
@@ -183,7 +183,7 @@ def analyze(user_input):
     }
     perms = permutations(user_input)
     possibles = {}
-    for permutation in list(perms):
+    for permutation in perms:
         distances = []
         root = permutation[0]
         len_user_input = len(user_input)
@@ -227,6 +227,8 @@ def analyze(user_input):
             if pattern in patterns:
                 possibles["%s %s" % (root.capitalize(), patterns[pattern])] =\
                     distances_to_symbols(root, distances, mode)
+        if not permute:
+            break
     return possibles
 
 
