@@ -47,7 +47,7 @@ def distances_to_symbols(root, distances, mode):
     pitches_max_index = len(PITCHES) - 1
     for distance in distances:
         pitch_index_at_distance = pitch_index + musical_to_dec(distance)
-        if pitch_index_at_distance > pitches_max_index:
+        while pitch_index_at_distance > pitches_max_index:
             pitch_index_at_distance =\
                 pitch_index_at_distance - pitches_max_index - 1
         pitch = PITCHES[pitch_index_at_distance]

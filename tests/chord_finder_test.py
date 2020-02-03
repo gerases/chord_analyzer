@@ -112,6 +112,7 @@ def test_dominant_7th():
 
 def test_major_7th():
     assert analyze(['a', 'c+', 'e', 'g+']) == {'A major 7th': 'ac+eg+'}
+    assert analyze(['b', 'd+', 'f+', 'a+']) == {'B major 7th': 'bd+f+a+'}
 
 
 def test_minor_7th():
