@@ -234,7 +234,7 @@ def analyze(user_input, permute=True):
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        print "Provide a few chord elements separated by spaces"
+        print "Provide a few chord elements. Use + for sharps and - for flats."
         sys.exit(1)
     request = sys.argv[1]
     possibilities = analyze(request)
