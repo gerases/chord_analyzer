@@ -4,8 +4,12 @@
 import sys
 import re
 from itertools import permutations
+from termcolor import colored
 
-
+# TODO:
+# 1. build all minor and major keys
+# 2. write function that takes a chord and finds all matching keys
+# 3. then somehow we need to print them all if requested
 DISTANCE_TO_NAME = {
     1: 'minor second',
     2: 'major second',
@@ -37,7 +41,7 @@ SHARP_TO_FLAT = {
 }
 
 
-def distances_to_symbols(root, distances, mode):
+def distances_to_symbols(root, distances, mode, return_as_list=False):
     """Returns a string representation of the chord
     based on the given distances from the root
     """
@@ -55,7 +59,10 @@ def distances_to_symbols(root, distances, mode):
             result.append(SHARP_TO_FLAT[pitch])
         else:
             result.append(PITCHES[pitch_index_at_distance])
-    return ''.join(result)
+    if return_as_list:
+        return result
+    else:
+        return ''.join(result)
 
 
 def parse_input(st):
@@ -145,6 +152,7 @@ def get_distance_in_semitones(a, b, req_min_distance=-1):
 
 
 # pylint: disable=too-many-locals
+# pylint: disable=too-many-branches
 def analyze(user_input, permute=True):
     # Validate input
     #
@@ -232,6 +240,64 @@ def analyze(user_input, permute=True):
     return possibles
 
 
+def print_chord_in_key_context(root, chord):
+    """
+     W W H W W W H
+    c d e f g a b c
+    """
+    dec_to_roman = {
+        1: 'I',
+        2: 'ii',
+        3: 'iii',
+        4: 'IV',
+        5: 'V',
+        6: 'vi',
+        7: 'vii',
+    }
+    distances = ['2', '4', '5', '7', '9', 'b']
+
+    scale_members = distances_to_symbols(root, distances,
+                                         'flat', return_as_list=True)
+
+    result = []
+    while len(chord) > 0:
+        i = 0
+        while i < 7 and len(chord) > 0:
+            if scale_members[i] == chord[0]:
+                result.append({'pitch': scale_members[i],
+                               'is_part_of_chord': True})
+                chord.pop(0)
+            else:
+                result.append({'pitch': scale_members[i],
+                               'is_part_of_chord': False})
+            i += 1
+
+    i = 1
+    for scale_member in result:
+        if scale_member['is_part_of_chord']:
+            print "%-13s" % colored(dec_to_roman[i], 'green'),
+        else:
+            print "%-4s" % dec_to_roman[i],
+        i += 1
+        if i > 7:
+            i = 1
+    print
+
+    length = len(result)
+    print '-' * (5 * length)
+
+    for scale_member in result:
+        if scale_member['is_part_of_chord']:
+            print "%-13s" % colored(scale_member['pitch'], 'blue'),
+        else:
+            print "%-4s" % scale_member['pitch'],
+
+
+def print_minor_scale(root):
+    distances = ['2', '3', '5', '7', '8', 'a']
+    return distances_to_symbols(root, distances, 'sharp')
+
+
 if __name__ == '__main__':
     if len(sys.argv) < 2:
         print "Provide a few chord elements. Use + for sharps and - for flats."
@@ -243,4 +309,5 @@ if __name__ == '__main__':
         sys.exit(1)
     for possibility, symbols in possibilities.items():
         print "%s [%s]" % (possibility, symbols)
+        print_chord_in_key_context('f', ['c', 'e', 'g', 'b-'])
     sys.exit(1)
