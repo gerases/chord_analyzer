@@ -5,13 +5,15 @@ import sys
 import re
 from itertools import permutations
 from termcolor import colored
+from chord_finder.NonAccidentalIter import NonAccidentalIter
 
 # TODO:
 # 1. build all minor and major keys at start
 # 2. write function that takes a chord and finds all matching keys
 # 3. then somehow we need to print them all if requested
 PITCHES = ['c', 'c+', 'd', 'd+', 'e', 'f', 'f+', 'g', 'g+', 'a', 'a+', 'b']
-SHARP_KEYS = ['c', 'g', 'd', 'a', 'e', 'b', 'f#', 'c#']
+SHARP_KEYS = ['c', 'g', 'd', 'a', 'e', 'b', 'f+', 'c+', 'g+', 'd+', 'a+',
+              'e+', 'b+']
 FLAT_KEYS = ['f', 'b-', 'e-', 'a-', 'd-', 'g-', 'c-']
 MAX_DISTANCE = 40
 ENHARM_FLAT_MODE = 'flat'
@@ -45,10 +47,11 @@ SHARP_TO_FLAT = {
 }
 
 
+# pylint: disable=unused-argument
 def spell_pitch_enharmonically(seen_pitches, pitch, expected_base, mode):
     """
     If a given pitch has already been mentioned in seen_pitches,
-    convert it to a pitch + an accidental. For example:
+    convert it to a (expected_base + accidental(s)). For example:
 
     # seen | pitch | expected base |return value
     # ==========================================
@@ -58,15 +61,18 @@ def spell_pitch_enharmonically(seen_pitches, pitch, expected_base, mode):
     # g+   | b     | a             |a++
     # ...
 
-    The number of accidentals can be determined by:
+    The number of accidentals to be added to the "expected base" can be
+    determined with this formula:
 
-    number of accidentals = semitone_distance(pitch - expected_base)
+    number of accidentals = semitone_distance between:
+        "pitch" and "expected_base"
     """
-    if pitch not in seen_pitches:
+    if pitch == expected_base:
         return pitch
-    if pitch in seen_pitches:
-        if mode == ENHARM_SHARP_MODE:
-            new_pitch = (pitch - semitone)
+    # pylint: disable=fixme
+    # TODO: check assumption that pitch is greater than expected_base
+    distance = get_distance_in_semitones(expected_base, pitch)
+    return "{0:s}{1:s}".format(expected_base, '+' * distance)
 
 
 def distances_to_symbols(root, distances, mode, return_as_list=False):
@@ -74,11 +80,16 @@ def distances_to_symbols(root, distances, mode, return_as_list=False):
     based on the given distances from the root
     """
     result = [root]
+    non_accident_base = root[0:1]
     root = move_in_half_steps(root[0:1], root[1:])
     pitch_index = PITCHES.index(root)
     pitches_max_index = len(PITCHES) - 1
     seen = {}
+    non_accident_iter = NonAccidentalIter(non_accident_base)
+    non_accident_base = non_accident_iter.__next__()
+    # print('root is %s' % non_accident_base)
     for distance in distances:
+        non_accident_base = non_accident_iter.__next__()
         pitch_index_at_distance = pitch_index + musical_to_dec(distance)
         while pitch_index_at_distance > pitches_max_index:
             pitch_index_at_distance =\
@@ -87,7 +98,14 @@ def distances_to_symbols(root, distances, mode, return_as_list=False):
         if mode == 'flat' and len(pitch) > 1:
             result.append(SHARP_TO_FLAT[pitch])
         else:
-            result.append(PITCHES[pitch_index_at_distance])
+            # print("HERE %s %s" % (pitch, non_accident_base))
+            pitch = PITCHES[pitch_index_at_distance]
+            enharmonic_pitch = spell_pitch_enharmonically(seen,
+                                                          pitch,
+                                                          non_accident_base,
+                                                          ENHARM_SHARP_MODE)
+            seen[non_accident_base] = True
+            result.append(enharmonic_pitch)
     if return_as_list:
         return result
     else:
@@ -199,7 +217,7 @@ def analyze(user_input, permute=True):
     rex = re.compile('[a-gA-G][#b]*')
     for item in user_input:
         if not rex.match(item):
-            print "Invalid input: %s" % item
+            print("Invalid input: %s" % item)
             sys.exit(1)
 
     patterns = {
@@ -272,14 +290,16 @@ def analyze(user_input, permute=True):
 def print_scale(scale):
     for scale_member in scale:
         if scale_member == scale[0]:
-            print "%-13s" % colored(scale_member, 'green'),
+            print("%-13s" % colored(scale_member, 'green'), end="")
         else:
-            print "%-4s" % scale_member,
-    print
+            print("%-4s" % scale_member, end="")
+    print()
 
 
 def build_major_scales():
     for root in SHARP_KEYS:
+        # if root != 'a+':
+        #     continue
         print_scale(build_major_scale(root, 'sharp'))
 
 
@@ -340,34 +360,34 @@ def print_chord_in_key_context(root, chord):
     i = 1
     for scale_member in result:
         if scale_member['is_part_of_chord']:
-            print "%-13s" % colored(dec_to_roman[i], 'green'),
+            print("%-13s" % colored(dec_to_roman[i], 'green'), end="")
         else:
-            print "%-4s" % dec_to_roman[i],
+            print("%-4s" % dec_to_roman[i], end="")
         i += 1
         if i > 7:
             i = 1
-    print
+    print()
 
     length = len(result)
-    print '-' * (5 * length)
+    print('-' * (5 * length))
 
     for scale_member in result:
         if scale_member['is_part_of_chord']:
-            print "%-13s" % colored(scale_member['pitch'], 'blue'),
+            print("%-13s" % colored(scale_member['pitch'], 'blue'), end="")
         else:
-            print "%-4s" % scale_member['pitch'],
+            print("%-4s" % scale_member['pitch'], end="")
 
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        print "Provide a few chord elements. Use + for sharps and - for flats."
+        print("Provide chord elements. Use + for sharps and - for flats.")
         sys.exit(1)
     request = sys.argv[1]
     possibilities = analyze(request)
     build_major_scales()
     if len(possibilities) < 1:
-        print "Nothing found for %s" % request
+        print("Nothing found for %s" % request)
         sys.exit(1)
     for possibility, symbols in possibilities.items():
-        print "%s [%s]" % (possibility, symbols)
+        print("{0:s} [{1:s}]".format(possibility, symbols))
     sys.exit(1)

@@ -2,10 +2,27 @@
 # -*- coding: utf-8 -*-
 
 import pytest
-import ChordFinder
-from ChordFinder import get_distance_in_semitones, dec_to_musical, parse_input
-from ChordFinder import distances_to_symbols, musical_to_dec, build_major_scale
-from ChordFinder import analyze
+from utils import spell_pitch_enharmonically
+from utils import distances_to_symbols, musical_to_dec, build_major_scale
+from utils import analyze
+
+
+def test_enharnomonic_spelling():
+    # When seen is empty, unmodified pitch should be returned
+    seen = {}
+    assert spell_pitch_enharmonically(seen, 'c', 'b', 'sharp') == 'c'
+
+    # 'c' written in terms of 'b' is 'b+'
+    seen = {'c'}
+    assert spell_pitch_enharmonically(seen, 'c', 'b', 'sharp') == 'b+'
+
+    # 'c' written in terms of 'a' is 'a+++'
+    seen = {'c'}
+    assert spell_pitch_enharmonically(seen, 'c', 'a', 'sharp') == 'a+++'
+
+    # 'f' written in terms of 'e' is 'e+'
+    seen = {'f'}
+    assert spell_pitch_enharmonically(seen, 'f', 'e', 'sharp') == 'e+'
 
 
 def test_musical_to_dec():
@@ -146,17 +163,31 @@ def test_major_thirteenth():
 
 def test_build_major_scales():
     mode = 'sharp'
-    # assert build_major_scale('c', mode) == ['c', 'd', 'e', 'f', 'g', 'a',
-    #                                         'b']
-    # assert build_major_scale('g', mode) == ['g', 'a', 'b', 'c', 'd', 'e',
-    #                                         'f+']
-    # assert build_major_scale('d', mode) == ['d', 'e', 'f+', 'g', 'a', 'b',
-    #                                         'c+']
-    # assert build_major_scale('a', mode) == ['a', 'b', 'c+', 'd', 'e', 'f+',
-    #                                         'g+']
-    # assert build_major_scale('e', mode) == ['e', 'f+', 'g+', 'a', 'b', 'c+',
-    #                                         'd+']
-    # assert build_major_scale('b', mode) == ['b', 'c+', 'd+', 'e', 'f+', 'g+',
-    #                                         'a+']
-    assert build_major_scale('f+', mode) == ['f+', 'g+', 'a+', 'b', 'c+', 'd+',
-                                             'e+']
+    assert build_major_scale('c', mode) == ['c', 'd', 'e', 'f', 'g', 'a',
+                                            'b']
+    assert build_major_scale('g', mode) == ['g', 'a', 'b', 'c', 'd', 'e',
+                                            'f+']
+    assert build_major_scale('d', mode) == ['d', 'e', 'f+', 'g', 'a', 'b',
+                                            'c+']
+    assert build_major_scale('a', mode) == ['a', 'b', 'c+', 'd', 'e', 'f+',
+                                            'g+']
+    assert build_major_scale('e', mode) == ['e', 'f+', 'g+', 'a', 'b', 'c+',
+                                            'd+']
+    assert build_major_scale('b', mode) == ['b', 'c+', 'd+', 'e', 'f+', 'g+',
+                                            'a+']
+    assert build_major_scale('f+', mode) == ['f+', 'g+', 'a+', 'b', 'c+',
+                                             'd+', 'e+']
+    assert build_major_scale('c+', mode) == ['c+', 'd+', 'e+', 'f+', 'g+',
+                                             'a+', 'b+']
+
+    assert build_major_scale('g+', mode) == ['g+', 'a+', 'b+', 'c+', 'd+',
+                                             'e+', 'f++']
+
+    assert build_major_scale('d+', mode) == ['d+', 'e+', 'f++', 'g+', 'a+',
+                                             'b+', 'c++']
+    assert build_major_scale('a+', mode) == ['a+', 'b+', 'c++', 'd+', 'e+',
+                                             'f++', 'g++']
+    assert build_major_scale('e+', mode) == ['e+', 'f++', 'g++', 'a+', 'b+',
+                                             'c++', 'd++']
+    assert build_major_scale('b+', mode) == ['b+', 'c++', 'd++', 'e+', 'f++',
+                                             'g++', 'a++']
