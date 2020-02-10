@@ -11,10 +11,13 @@ from chord_finder.NonAccidentalIter import NonAccidentalIter
 # 1. build all minor and major keys at start
 # 2. write function that takes a chord and finds all matching keys
 # 3. then somehow we need to print them all if requested
+# 4. need scale iterator to look for matching chords
 PITCHES = ['c', 'c+', 'd', 'd+', 'e', 'f', 'f+', 'g', 'g+', 'a', 'a+', 'b']
+PITCHES_FLAT = ['c', 'b', 'b-', 'a', 'a-', 'g', 'g-', 'f', 'e', 'e-', 'd',
+                'd-']
 SHARP_KEYS = ['c', 'g', 'd', 'a', 'e', 'b', 'f+', 'c+', 'g+', 'd+', 'a+',
               'e+', 'b+']
-FLAT_KEYS = ['f', 'b-', 'e-', 'a-', 'd-', 'g-', 'c-']
+FLAT_KEYS = ['f', 'b-', 'e-', 'a-', 'd-', 'g-']
 MAX_DISTANCE = 40
 ENHARM_FLAT_MODE = 'flat'
 ENHARM_SHARP_MODE = 'sharp'
@@ -48,17 +51,17 @@ SHARP_TO_FLAT = {
 
 
 # pylint: disable=unused-argument
-def spell_pitch_enharmonically(seen_pitches, pitch, expected_base, mode):
+def spell_pitch_enharmonically(pitch, expected_base, mode):
     """
-    If a given pitch has already been mentioned in seen_pitches,
-    convert it to a (expected_base + accidental(s)). For example:
+    Express a given sharpened/flattened pitch in terms of another pitch
+    For example:
 
-    # seen | pitch | expected base |return value
-    # ==========================================
-    # f    | f     | e             |e+
-    # f+   | f+    | e             |e++
-    # f++  | f+++  | e             |e+++
-    # g+   | b     | a             |a++
+    # pitch | expected base |return value
+    # ===================================
+    # f     | e             |e+
+    # f+    | e             |e++
+    # f+++  | e             |e+++
+    # b     | a             |a++
     # ...
 
     The number of accidentals to be added to the "expected base" can be
@@ -69,10 +72,14 @@ def spell_pitch_enharmonically(seen_pitches, pitch, expected_base, mode):
     """
     if pitch == expected_base:
         return pitch
-    # pylint: disable=fixme
-    # TODO: check assumption that pitch is greater than expected_base
-    distance = get_distance_in_semitones(expected_base, pitch)
-    return "{0:s}{1:s}".format(expected_base, '+' * distance)
+    if mode == ENHARM_SHARP_MODE:
+        # pylint: disable=fixme
+        # TODO: check assumption that pitch is greater than expected_base
+        distance = get_distance_in_semitones(expected_base, pitch)
+        return "{0:s}{1:s}".format(expected_base, '+' * distance)
+    else:
+        distance = get_distance_in_semitones(pitch, expected_base)
+        return "{0:s}{1:s}".format(expected_base, '-' * distance)
 
 
 def distances_to_symbols(root, distances, mode, return_as_list=False):
@@ -80,11 +87,10 @@ def distances_to_symbols(root, distances, mode, return_as_list=False):
     based on the given distances from the root
     """
     result = [root]
-    non_accident_base = root[0:1]
-    root = move_in_half_steps(root[0:1], root[1:])
-    pitch_index = PITCHES.index(root)
+    non_accident_base, accidentals = root[0:1], root[1:]
+    start = move_in_half_steps(non_accident_base, accidentals)
+    pitch_index = lookup_pitch(start)
     pitches_max_index = len(PITCHES) - 1
-    seen = {}
     non_accident_iter = NonAccidentalIter(non_accident_base)
     non_accident_base = non_accident_iter.__next__()
     # print('root is %s' % non_accident_base)
@@ -95,17 +101,12 @@ def distances_to_symbols(root, distances, mode, return_as_list=False):
             pitch_index_at_distance =\
                 pitch_index_at_distance - pitches_max_index - 1
         pitch = PITCHES[pitch_index_at_distance]
-        if mode == 'flat' and len(pitch) > 1:
-            result.append(SHARP_TO_FLAT[pitch])
-        else:
-            # print("HERE %s %s" % (pitch, non_accident_base))
-            pitch = PITCHES[pitch_index_at_distance]
-            enharmonic_pitch = spell_pitch_enharmonically(seen,
-                                                          pitch,
-                                                          non_accident_base,
-                                                          ENHARM_SHARP_MODE)
-            seen[non_accident_base] = True
-            result.append(enharmonic_pitch)
+        enharmonic_pitch = spell_pitch_enharmonically(pitch,
+                                                      non_accident_base,
+                                                      mode)
+        # print("HERE %s %s" % (pitch, non_accident_base))
+        result.append(enharmonic_pitch)
+    # pylint: disable=no-else-return
     if return_as_list:
         return result
     else:
@@ -171,12 +172,12 @@ def move_in_half_steps(pitch, accidentals):
             if result == 'b':
                 result = 'c'
             else:
-                result = PITCHES[PITCHES.index(result) + 1]
+                result = PITCHES[lookup_pitch(result) + 1]
         else:
             if result == 'c':
                 result = 'b'
             else:
-                result = PITCHES[PITCHES.index(result) - 1]
+                result = PITCHES[lookup_pitch(result) - 1]
     return result
 
 
@@ -298,9 +299,9 @@ def print_scale(scale):
 
 def build_major_scales():
     for root in SHARP_KEYS:
-        # if root != 'a+':
-        #     continue
-        print_scale(build_major_scale(root, 'sharp'))
+        print_scale(build_major_scale(root, ENHARM_SHARP_MODE))
+    for root in FLAT_KEYS:
+        print_scale(build_major_scale(root, ENHARM_FLAT_MODE))
 
 
 def build_major_scale(root, mode):

@@ -161,7 +161,7 @@ def test_major_thirteenth():
                                              'A minor 7th': 'aceg'}
 
 
-def test_build_major_scales():
+def test_build_major_sharp_scales():
     mode = 'sharp'
     assert build_major_scale('c', mode) == ['c', 'd', 'e', 'f', 'g', 'a',
                                             'b']
@@ -191,3 +191,21 @@ def test_build_major_scales():
                                              'c++', 'd++']
     assert build_major_scale('b+', mode) == ['b+', 'c++', 'd++', 'e+', 'f++',
                                              'g++', 'a++']
+
+
+def test_build_major_flat_scales():
+    mode = 'flat'
+    assert build_major_scale('f', mode) == ['f', 'g', 'a', 'b-', 'c', 'd',
+                                            'e']
+    assert build_major_scale('b-', mode) == ['b-', 'c', 'd', 'e-', 'f', 'g',
+                                             'a']
+    assert build_major_scale('e-', mode) == ['e-', 'f', 'g', 'a-', 'b-', 'c',
+                                             'd']
+    assert build_major_scale('a-', mode) == ['a-', 'b-', 'c', 'd-', 'e-', 'f',
+                                             'g']
+    assert build_major_scale('d-', mode) == ['d-', 'e-', 'f', 'g-', 'a-', 'b-',
+                                             'c']
+    assert build_major_scale('g-', mode) == ['g-', 'a-', 'b-', 'c-', 'd-',
+                                             'e-', 'f']
+    assert build_major_scale('c-', mode) == ['c-', 'd-', 'e-', 'f-', 'g-',
+                                             'a-', 'b-']
