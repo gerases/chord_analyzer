@@ -46,7 +46,7 @@ $(ENV_PATH):
 	@rm -rf $(MKDIR)/env
 	@virtualenv --python=python$(PYTHON_VER) env
 	@env/bin/pip install --upgrade --no-cache-dir pip setuptools
-	@env/bin/pip install --upgrade --no-cache-dir pytest sh pylint pytest-mock flake8
+	@env/bin/pip install --upgrade --no-cache-dir pytest sh pycodestyle pytest-mock flake8
 	@echo
 	@echo Python environment built, to enable run the following:
 	@echo
