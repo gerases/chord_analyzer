@@ -2,27 +2,25 @@
 # -*- coding: utf-8 -*-
 
 import pytest
-from utils import spell_pitch_enharmonically
-from utils import distances_to_symbols, musical_to_dec, build_major_scale
-from utils import analyze
+from chord_finder.common import ENHARM_SHARP_MODE, ENHARM_FLAT_MODE
+from chord_finder.utils import spell_pitch_enharmonically
+from chord_finder.utils import distances_to_symbols, musical_to_dec
+from chord_finder.utils import build_major_scale
+from chord_finder.utils import analyze
 
 
 def test_enharnomonic_spelling():
     # When seen is empty, unmodified pitch should be returned
-    seen = {}
-    assert spell_pitch_enharmonically(seen, 'c', 'b', 'sharp') == 'c'
+    assert spell_pitch_enharmonically('c', 'b', ENHARM_SHARP_MODE) == 'c'
 
     # 'c' written in terms of 'b' is 'b+'
-    seen = {'c'}
-    assert spell_pitch_enharmonically(seen, 'c', 'b', 'sharp') == 'b+'
+    assert spell_pitch_enharmonically('c', 'b', ENHARM_SHARP_MODE) == 'b+'
 
     # 'c' written in terms of 'a' is 'a+++'
-    seen = {'c'}
-    assert spell_pitch_enharmonically(seen, 'c', 'a', 'sharp') == 'a+++'
+    assert spell_pitch_enharmonically('c', 'a', ENHARM_SHARP_MODE) == 'a+++'
 
     # 'f' written in terms of 'e' is 'e+'
-    seen = {'f'}
-    assert spell_pitch_enharmonically(seen, 'f', 'e', 'sharp') == 'e+'
+    assert spell_pitch_enharmonically('f', 'e', ENHARM_SHARP_MODE) == 'e+'
 
 
 def test_musical_to_dec():
@@ -162,7 +160,7 @@ def test_major_thirteenth():
 
 
 def test_build_major_sharp_scales():
-    mode = 'sharp'
+    mode = ENHARM_SHARP_MODE
     assert build_major_scale('c', mode) == ['c', 'd', 'e', 'f', 'g', 'a',
                                             'b']
     assert build_major_scale('g', mode) == ['g', 'a', 'b', 'c', 'd', 'e',
@@ -194,7 +192,7 @@ def test_build_major_sharp_scales():
 
 
 def test_build_major_flat_scales():
-    mode = 'flat'
+    mode = ENHARM_FLAT_MODE
     assert build_major_scale('f', mode) == ['f', 'g', 'a', 'b-', 'c', 'd',
                                             'e']
     assert build_major_scale('b-', mode) == ['b-', 'c', 'd', 'e-', 'f', 'g',
@@ -209,3 +207,13 @@ def test_build_major_flat_scales():
                                              'e-', 'f']
     assert build_major_scale('c-', mode) == ['c-', 'd-', 'e-', 'f-', 'g-',
                                              'a-', 'b-']
+    assert build_major_scale('f-', mode) == ['f-', 'g-', 'a-', 'b--', 'c-',
+                                             'd-', 'e-']
+    assert build_major_scale('b--', mode) == ['b--', 'c-', 'd-', 'e--', 'f-',
+                                              'g-', 'a-']
+    assert build_major_scale('e--', mode) == ['e--', 'f-', 'g-', 'a--', 'b--',
+                                              'c-', 'd-']
+    assert build_major_scale('a--', mode) == ['a--', 'b--', 'c-', 'd--', 'e--',
+                                              'f-', 'g-']
+    assert build_major_scale('d--', mode) == ['d--', 'e--', 'f-', 'g--', 'a--',
+                                              'b--', 'c-']
