@@ -10,9 +10,6 @@ from chord_finder.utils import analyze
 
 
 def test_enharnomonic_spelling():
-    # When seen is empty, unmodified pitch should be returned
-    assert spell_pitch_enharmonically('c', 'b', ENHARM_SHARP_MODE) == 'c'
-
     # 'c' written in terms of 'b' is 'b+'
     assert spell_pitch_enharmonically('c', 'b', ENHARM_SHARP_MODE) == 'b+'
 
