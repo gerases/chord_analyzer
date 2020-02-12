@@ -1,0 +1,14 @@
+---
+scales:
+  f:   [f,   g,   a,  b-,  c,   d,   e]
+  b-:  [b-,  c,   d,  e-,  f,   g,   a]
+  e-:  [e-,  f,   g,  a-,  b-,  c,   d]
+  a-:  [a-,  b-,  c,  d-,  e-,  f,   g]
+  d-:  [d-,  e-,  f,  g-,  a-,  b-,  c]
+  g-:  [g-,  a-,  b-, c-,  d-,  e-,  f]
+  c-:  [c-,  d-,  e-, f-,  g-,  a-,  b-]
+  f-:  [f-,  g-,  a-, b--, c-,  d-,  e-]
+  b--: [b--, c-,  d-, e--, f-,  g-,  a-]
+  e--: [e--, f-,  g-, a--, b--, c-,  d-]
+  a--: [a--, b--, c-, d--, e--, f-,  g-]
+  d--: [d--, e--, f-, g--, a--, b--, c-]
