@@ -2,18 +2,20 @@
 # -*- coding: utf-8 -*-
 
 import yaml
-from chord_finder import MajorScale
+from chord_finder.MajorScale import MajorScale
 from chord_finder.common import ENHARM_SHARP_MODE, ENHARM_FLAT_MODE
+from chord_finder.utils import spell_pitch_enharmonically
 
-# def test_enharnomonic_spelling():
-#     # 'c' written in terms of 'b' is 'b+'
-#     assert spell_pitch_enharmonically('c', 'b', ENHARM_SHARP_MODE) == 'b+'
 
-#     # 'c' written in terms of 'a' is 'a+++'
-#     assert spell_pitch_enharmonically('c', 'a', ENHARM_SHARP_MODE) == 'a+++'
+def test_enharnomonic_spelling():
+    # 'c' written in terms of 'b' is 'b+'
+    assert spell_pitch_enharmonically('c', 'b', ENHARM_SHARP_MODE) == 'b+'
 
-#     # 'f' written in terms of 'e' is 'e+'
-#     assert spell_pitch_enharmonically('f', 'e', ENHARM_SHARP_MODE) == 'e+'
+    # 'c' written in terms of 'a' is 'a+++'
+    assert spell_pitch_enharmonically('c', 'a', ENHARM_SHARP_MODE) == 'a+++'
+
+    # 'f' written in terms of 'e' is 'e+'
+    assert spell_pitch_enharmonically('f', 'e', ENHARM_SHARP_MODE) == 'e+'
 
 
 def test_build_major_sharp_scales():
@@ -23,7 +25,7 @@ def test_build_major_sharp_scales():
 
     scales = data['scales']
     for root in scales:
-        scale = MajorScale.MajorScale(root, mode)
+        scale = MajorScale(root, mode)
         assert scale.get_members() == scales[root]
 
 
@@ -34,5 +36,5 @@ def test_build_major_flat_scales():
 
     scales = data['scales']
     for root in scales:
-        scale = MajorScale.MajorScale(root, mode)
+        scale = MajorScale(root, mode)
         assert scale.get_members() == scales[root]

@@ -49,6 +49,37 @@ SHARP_TO_FLAT = {
 }
 
 
+def spell_pitch_enharmonically(pitch, expected_base, mode):
+    """
+    Express a given sharpened/flattened pitch in terms of another pitch
+    For example:
+
+    # pitch | expected base |return value
+    # ===================================
+    # f     | e             |e+
+    # f+    | e             |e++
+    # f+++  | e             |e+++
+    # b     | a             |a++
+    # ...
+
+    The number of accidentals to be added to the "expected base" can be
+    determined with this formula:
+
+    number of accidentals = semitone_distance between:
+        "pitch" and "expected_base"
+    """
+    if pitch == expected_base:
+        return pitch
+    if mode == ENHARM_SHARP_MODE:
+        # pylint: disable=fixme
+        # TODO: check assumption that pitch is greater than expected_base
+        distance = get_distance_in_semitones(expected_base, pitch)
+        return "{0:s}{1:s}".format(expected_base, '+' * distance)
+    else:
+        distance = get_distance_in_semitones(pitch, expected_base)
+        return "{0:s}{1:s}".format(expected_base, '-' * distance)
+
+
 def parse_input(st):
     i = 0
     result = []
