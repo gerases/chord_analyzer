@@ -5,10 +5,9 @@ from chord_finder.NonAccidentalIter import NonAccidentalIter
 from chord_finder.utils import move_in_half_steps
 from chord_finder.utils import lookup_pitch
 from chord_finder.utils import musical_to_dec
-from chord_finder.utils import get_distance_in_semitones
 from chord_finder.utils import spell_pitch_enharmonically
 from chord_finder.common import PITCHES
-from chord_finder.common import ENHARM_SHARP_MODE
+# from chord_finder.common import ENHARM_SHARP_MODE
 # from chord_finder.common import ENHARM_FLAT_MODE
 
 
