@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-PITCHES = ['c', 'c+', 'd', 'd+', 'e', 'f', 'f+', 'g', 'g+', 'a', 'a+', 'b']
+from chord_finder.common import PITCHES
 
 
 class AccidentalIter:

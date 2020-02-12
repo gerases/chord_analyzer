@@ -1,0 +1,3 @@
+[MESSAGES CONTROL]
+
+disable=superfluous-parens,missing-docstring,old-style-class,no-self-use,import-error,no-name-in-module

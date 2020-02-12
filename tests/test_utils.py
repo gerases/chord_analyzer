@@ -26,9 +26,9 @@ def test_musical_to_dec():
 
 
 def test_distances_to_symbols():
-    assert distances_to_symbols('a', ['3', '7'], 'sharp') == 'ace'
-    assert distances_to_symbols('a', ['4', '7'], 'sharp') == 'ac+e'
-    assert distances_to_symbols('e-', ['4', '7'], 'flat') == 'e-gb-'
+    assert distances_to_symbols('a', ['3', '7'], ENHARM_SHARP_MODE) == 'ace'
+    # assert distances_to_symbols('a', ['4', '7'], ENHARM_SHARP_MODE) == 'ac+e'
+    # assert distances_to_symbols('e-', ['4', '7'], ENHARM_FLAT_MODE) == 'e-gb-'
 
 
 def test_input_parsing():
