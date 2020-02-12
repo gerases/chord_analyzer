@@ -17,5 +17,5 @@ setup(
     maintainer='Sergei Gerasenko',
     maintainer_email='gerases@gmail.com',
     long_description=LONG_DESC,
-    install_requires=['termcolor'],
+    install_requires=['termcolor', 'pyyaml'],
 )

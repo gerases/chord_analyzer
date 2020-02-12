@@ -18,9 +18,9 @@ class MajorScale:
         c d e f g a b c
         """
         self.distances = ['2', '4', '5', '7', '9', 'b']
-        self.scale_members = self.distances_to_symbols(True)
         self.mode = mode
         self.root = root
+        self.scale_members = self.distances_to_symbols(True)
 
     def get_members(self):
         return self.scale_members

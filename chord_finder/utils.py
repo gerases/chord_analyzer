@@ -5,7 +5,6 @@ import sys
 import re
 from itertools import permutations
 from termcolor import colored
-from chord_finder.MajorScale import MajorScale
 
 # TODO:
 # 1. build all minor and major keys at start

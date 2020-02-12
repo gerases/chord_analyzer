@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from chord_finder.MajorScale import MajorScale
+from chord_finder import MajorScale
 from chord_finder.common import ENHARM_SHARP_MODE, ENHARM_FLAT_MODE
 import yaml
 
@@ -18,11 +18,13 @@ import yaml
 
 def test_build_major_sharp_scales():
     mode = ENHARM_SHARP_MODE
-    with open('tests/data/major_sharp_scales.yaml') as file:
-        data = yaml.load(file)
+    with open('tests/data/major_sharp_scales.yaml') as handle:
+        data = yaml.load(handle, Loader=yaml.FullLoader)
 
-    for root in data:
-        print(root)
+    scales = data['scales']
+    for root in scales:
+        scale = MajorScale.MajorScale(root, mode)
+        assert scale.get_members() == scales[root]
 
 
 # def test_build_major_flat_scales():
