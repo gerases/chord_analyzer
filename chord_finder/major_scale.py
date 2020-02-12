@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from chord_finder.NonAccidentalIter import NonAccidentalIter
+from chord_finder.non_accidental_iter import NonAccidentalIter
 from chord_finder.utils import move_in_half_steps
 from chord_finder.utils import lookup_pitch
 from chord_finder.utils import musical_to_dec
