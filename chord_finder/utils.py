@@ -5,22 +5,16 @@ import sys
 import re
 from itertools import permutations
 from termcolor import colored
+from chord_finder.common import PITCHES
+from chord_finder.common import ENHARM_FLAT_MODE
+from chord_finder.common import ENHARM_SHARP_MODE
+from chord_finder.common import MAX_DISTANCE
 
 # TODO:
 # 1. build all minor and major keys at start
 # 2. write function that takes a chord and finds all matching keys
 # 3. then somehow we need to print them all if requested
 # 4. need scale iterator to look for matching chords
-PITCHES = ['c', 'c+', 'd', 'd+', 'e', 'f', 'f+', 'g', 'g+', 'a', 'a+', 'b']
-PITCHES_FLAT = ['c', 'b', 'b-', 'a', 'a-', 'g', 'g-', 'f', 'e', 'e-', 'd',
-                'd-']
-SHARP_KEYS = ['c', 'g', 'd', 'a', 'e', 'b', 'f+', 'c+', 'g+', 'd+', 'a+',
-              'e+', 'b+']
-FLAT_KEYS = ['f', 'b-', 'e-', 'a-', 'd-', 'g-']
-MAX_DISTANCE = 40
-ENHARM_FLAT_MODE = 'flat'
-ENHARM_SHARP_MODE = 'sharp'
-
 
 DISTANCE_TO_NAME = {
     1: 'minor second',
