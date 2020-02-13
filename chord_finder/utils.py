@@ -9,6 +9,10 @@ from chord_finder.common import PITCHES
 from chord_finder.common import ENHARM_FLAT_MODE
 from chord_finder.common import ENHARM_SHARP_MODE
 from chord_finder.common import MAX_DISTANCE
+from chord_finder.common import SHARP_KEYS
+from chord_finder.common import FLAT_KEYS
+from chord_finder.major_scale import MajorScale
+from chord_finder.scale_iter import ScaleIter
 
 # TODO:
 # 1. build all minor and major keys at start
@@ -160,6 +164,20 @@ def get_distance_in_semitones(a, b, req_min_distance=-1):
     return distance
 
 
+def find_pitches_to_scale(pitches_list, scale):
+    matches = []
+    scale_root = scale.get_root()
+    scale_iter = ScaleIter(scale, scale_root)
+    i = 1
+    for scale_member in scale_iter:
+        pitch = pitches_list[0]
+        if pitch == scale_member:
+            matches.append({'scale_degree': i, 'scale_member': pitch})
+        if len(pitches_list) <= 0 or i > MAX_DISTANCE:
+            break
+    return matches
+
+
 # pylint: disable=too-many-locals
 # pylint: disable=too-many-branches
 def analyze(user_input, permute=True):
@@ -259,10 +277,14 @@ def print_scale(scale):
 
 
 def build_major_scales():
+    result = []
     for root in SHARP_KEYS:
-        print_scale(build_major_scale(root, ENHARM_SHARP_MODE))
+        scale = MajorScale(root, ENHARM_SHARP_MODE)
+        result.append(scale)
     for root in FLAT_KEYS:
-        print_scale(build_major_scale(root, ENHARM_FLAT_MODE))
+        scale = MajorScale(root, ENHARM_FLAT_MODE)
+        result.append(scale)
+    return result
 
 
 def build_minor_scale(root, mode):
