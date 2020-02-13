@@ -7,8 +7,21 @@ from chord_finder.utils import lookup_pitch
 from chord_finder.utils import musical_to_dec
 from chord_finder.utils import spell_pitch_enharmonically
 from chord_finder.common import PITCHES
-# from chord_finder.common import ENHARM_SHARP_MODE
-# from chord_finder.common import ENHARM_FLAT_MODE
+from chord_finder.common import SHARP_KEYS
+from chord_finder.common import FLAT_KEYS
+from chord_finder.common import ENHARM_SHARP_MODE
+from chord_finder.common import ENHARM_FLAT_MODE
+
+
+def build_major_scales():
+    result = []
+    for root in SHARP_KEYS:
+        scale = MajorScale(root, ENHARM_SHARP_MODE)
+        result.append(scale)
+    for root in FLAT_KEYS:
+        scale = MajorScale(root, ENHARM_FLAT_MODE)
+        result.append(scale)
+    return result
 
 
 class MajorScale:
@@ -20,13 +33,22 @@ class MajorScale:
         self.distances = ['2', '4', '5', '7', '9', 'b']
         self.mode = mode
         self.root = root
-        self.scale_members = self.distances_to_symbols(True)
+        self.member_to_distance = {}
+        self.scale_members = self.distances_to_symbols(return_as_list=True)
+
+    def get_member_distance(self, scale_member):
+        if scale_member == self.get_root():
+            return '0'
+        return self.member_to_distance[scale_member]
 
     def get_members(self):
         return self.scale_members
 
+    def get_root(self):
+        return self.root
+
     def __str__(self):
-        print("major scale %s: %s" % (self.root, self.scale_members))
+        return "major scale %s: %s" % (self.root, self.scale_members)
 
     def distances_to_symbols(self, return_as_list):
         """Returns an enharomonic string representing the chord
@@ -39,7 +61,7 @@ class MajorScale:
         pitches_max_index = len(PITCHES) - 1
         non_accident_iter = NonAccidentalIter(non_accident_base)
         non_accident_base = non_accident_iter.__next__()
-        print('root is %s' % non_accident_base)
+        # print('root is %s' % non_accident_base)
         for distance in self.distances:
             dec_distance = musical_to_dec(distance)
             pitch_index_at_distance = pitch_index + dec_distance
@@ -54,6 +76,7 @@ class MajorScale:
                                            self.mode)
             # print("HERE %s %s" % (pitch, non_accident_base))
             result.append(enharmonic_pitch)
+            self.member_to_distance[enharmonic_pitch] = distance
         if return_as_list:
             return result
         else:

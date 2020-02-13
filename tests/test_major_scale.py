@@ -38,3 +38,14 @@ def test_build_major_flat_scales():
     for root in scales:
         scale = MajorScale(root, mode)
         assert scale.get_members() == scales[root]
+
+
+def test_member_to_distance():
+    scale = MajorScale('c', ENHARM_SHARP_MODE)
+    assert scale.get_member_distance('c') == '0'
+    assert scale.get_member_distance('d') == '2'
+    assert scale.get_member_distance('e') == '4'
+    assert scale.get_member_distance('f') == '5'
+    assert scale.get_member_distance('g') == '7'
+    assert scale.get_member_distance('a') == '9'
+    assert scale.get_member_distance('b') == 'b'

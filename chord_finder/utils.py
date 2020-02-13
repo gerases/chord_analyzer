@@ -6,12 +6,8 @@ import re
 from itertools import permutations
 from termcolor import colored
 from chord_finder.common import PITCHES
-from chord_finder.common import ENHARM_FLAT_MODE
 from chord_finder.common import ENHARM_SHARP_MODE
 from chord_finder.common import MAX_DISTANCE
-from chord_finder.common import SHARP_KEYS
-from chord_finder.common import FLAT_KEYS
-from chord_finder.major_scale import MajorScale
 from chord_finder.scale_iter import ScaleIter
 
 # TODO:
@@ -164,17 +160,19 @@ def get_distance_in_semitones(a, b, req_min_distance=-1):
     return distance
 
 
-def find_pitches_to_scale(pitches_list, scale):
+def find_pitches_in_scale(pitches, scale):
     matches = []
     scale_root = scale.get_root()
     scale_iter = ScaleIter(scale, scale_root)
     i = 1
     for scale_member in scale_iter:
-        pitch = pitches_list[0]
+        pitch = pitches[0]
         if pitch == scale_member:
             matches.append({'scale_degree': i, 'scale_member': pitch})
-        if len(pitches_list) <= 0 or i > MAX_DISTANCE:
+            pitches.pop(0)
+        if len(pitches) <= 0 or i > MAX_DISTANCE:
             break
+        i += 1
     return matches
 
 
@@ -276,17 +274,6 @@ def print_scale(scale):
     print()
 
 
-def build_major_scales():
-    result = []
-    for root in SHARP_KEYS:
-        scale = MajorScale(root, ENHARM_SHARP_MODE)
-        result.append(scale)
-    for root in FLAT_KEYS:
-        scale = MajorScale(root, ENHARM_FLAT_MODE)
-        result.append(scale)
-    return result
-
-
 def build_minor_scale(root, mode):
     """
      W H W W H W W
@@ -357,7 +344,7 @@ if __name__ == '__main__':
         sys.exit(1)
     request = sys.argv[1]
     possibilities = analyze(request)
-    build_major_scales()
+    # build_major_scales()
     if len(possibilities) < 1:
         print("Nothing found for %s" % request)
         sys.exit(1)
