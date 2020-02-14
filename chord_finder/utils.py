@@ -7,8 +7,6 @@ from itertools import permutations
 from termcolor import colored
 from chord_finder.common import PITCHES
 from chord_finder.common import ENHARM_SHARP_MODE
-from chord_finder.common import MAX_DISTANCE
-from chord_finder.scale_iter import ScaleIter
 
 # TODO:
 # 1. build all minor and major keys at start
@@ -158,24 +156,6 @@ def get_distance_in_semitones(a, b, req_min_distance=-1):
             start = move_in_half_steps(start, '+')
             distance += 1
     return distance
-
-
-def find_pitches_in_scale(pitches, scale):
-    matches = []
-    scale_root = scale.get_root()
-    scale_iter = ScaleIter(scale, scale_root)
-    i = 1
-    for scale_member, distance in scale_iter:
-        pitch = pitches[0]
-        if pitch == scale_member:
-            matches.append({'degree': i,
-                            'pitch': pitch,
-                            'distance': distance})
-            pitches.pop(0)
-        if len(pitches) <= 0 or i > MAX_DISTANCE:
-            break
-        i += 1
-    return matches
 
 
 # pylint: disable=too-many-locals

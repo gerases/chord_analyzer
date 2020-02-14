@@ -49,3 +49,10 @@ def test_member_to_distance():
     assert scale.get_member_distance('g') == '7'
     assert scale.get_member_distance('a') == '9'
     assert scale.get_member_distance('b') == 'b'
+
+
+def test_fit_pitches_to_scale():
+    scale = MajorScale('c', ENHARM_SHARP_MODE)
+    matches = scale.fit_pitches_in_scale(['c', 'e', 'g'])
+
+    assert  == []

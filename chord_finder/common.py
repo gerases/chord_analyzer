@@ -9,7 +9,7 @@ PITCHES_FLAT = ['c', 'b', 'b-', 'a', 'a-', 'g', 'g-', 'f', 'e', 'e-', 'd',
 SHARP_KEYS = ['c', 'g', 'd', 'a', 'e', 'b', 'f+', 'c+', 'g+', 'd+', 'a+',
               'e+', 'b+']
 FLAT_KEYS = ['f', 'b-', 'e-', 'a-', 'd-', 'g-']
-MAX_DISTANCE = 40
+MAX_DISTANCE = 23
 ENHARM_FLAT_MODE = 'flat'
 ENHARM_SHARP_MODE = 'sharp'
 
