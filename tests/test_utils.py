@@ -5,17 +5,7 @@
 # from chord_finder.utils import distances_to_symbols, musical_to_dec
 from chord_finder.common import ENHARM_SHARP_MODE
 from chord_finder.utils import spell_pitch_enharmonically
-from chord_finder.utils import find_pitches_in_scale
 from chord_finder.major_scale import MajorScale
-
-
-def test_find_pitches_in_scale():
-    pitches = ['c', 'e', 'g']
-    scale = MajorScale('c', ENHARM_SHARP_MODE)
-    result = find_pitches_in_scale(pitches, scale)
-    expected = ['%s-%s-%s' % (m['degree'], m['member'], m['distance'])
-                for m in result]
-    assert expected == ['1-c-0', '3-e-4', '5-g-7']
 
 
 def test_enharnomonic_spelling():

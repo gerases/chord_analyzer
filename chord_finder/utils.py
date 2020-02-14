@@ -7,6 +7,7 @@ from itertools import permutations
 from termcolor import colored
 from chord_finder.common import PITCHES
 from chord_finder.common import ENHARM_SHARP_MODE
+from chord_finder.common import MAX_DISTANCE
 
 # TODO:
 # 1. build all minor and major keys at start

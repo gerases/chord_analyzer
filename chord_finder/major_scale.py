@@ -86,6 +86,7 @@ class MajorScale:
         matches = []
         scale_root = self.get_root()
         scale_iter = ScaleIter(self, scale_root)
+        len_pitches_orig = len(pitches)
         i = 1
         for scale_member in scale_iter:
             pitch = pitches[0]
@@ -97,4 +98,6 @@ class MajorScale:
             if len(pitches) <= 0 or i > MAX_DISTANCE:
                 break
             i += 1
+        if len(matches) != len_pitches_orig:
+            return []
         return matches

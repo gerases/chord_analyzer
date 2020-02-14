@@ -53,6 +53,16 @@ def test_member_to_distance():
 
 def test_fit_pitches_to_scale():
     scale = MajorScale('c', ENHARM_SHARP_MODE)
-    matches = scale.fit_pitches_in_scale(['c', 'e', 'g'])
-
-    assert  == []
+    pitches = ['c', 'd', 'e', 'f', 'g', 'a', 'b']
+    matches = scale.fit_pitches_in_scale(pitches)
+    expected = ['%s-%s-%s' % (m['degree'], m['pitch'], m['distance'])
+                for m in matches]
+    assert expected == [
+                '1-c-0',
+                '2-d-2',
+                '3-e-4',
+                '4-f-5',
+                '5-g-7',
+                '6-a-9',
+                '7-b-b'
+                ]

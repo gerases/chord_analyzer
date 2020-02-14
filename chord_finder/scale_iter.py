@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from chord_finder.utils import musical_to_dec
+from chord_finder.utils import dec_to_musical
 
 
 class ScaleIter:
@@ -22,14 +23,14 @@ class ScaleIter:
     def __next__(self):
         index = self.index
         self.total_iterations += 1
-        self.index += 1
         if self.limit > 0 and self.total_iterations > self.limit:
             raise StopIteration
         if self.index > len(self.members) - 1:
             self.index = 0
             self.distance_base = 12
         member = self.members[index]
+        self.index += 1
         member_distance = self.scale.get_member_distance(member)
         distance = self.distance_base + musical_to_dec(member_distance)
-        self.distance_traveled = distance
+        self.distance_traveled = dec_to_musical(distance)
         return self.members[index]
