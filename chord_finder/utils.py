@@ -165,10 +165,12 @@ def find_pitches_in_scale(pitches, scale):
     scale_root = scale.get_root()
     scale_iter = ScaleIter(scale, scale_root)
     i = 1
-    for scale_member in scale_iter:
+    for scale_member, distance in scale_iter:
         pitch = pitches[0]
         if pitch == scale_member:
-            matches.append({'scale_degree': i, 'scale_member': pitch})
+            matches.append({'degree': i,
+                            'pitch': pitch,
+                            'distance': distance})
             pitches.pop(0)
         if len(pitches) <= 0 or i > MAX_DISTANCE:
             break

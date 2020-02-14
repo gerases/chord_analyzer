@@ -30,7 +30,8 @@ class MajorScale:
          W W H W W W H
         e.g: c d e f g a b c
         """
-        self.distances = ['2', '4', '5', '7', '9', 'b']
+        self.distances = ['2', '4', '5', '7', '9', 'b',
+                          'e', 'g', 'h', 'j', 'l', 'n']
         self.mode = mode
         self.root = root
         self.member_to_distance = {}

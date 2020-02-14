@@ -25,9 +25,18 @@ DISTANCE_TO_NAME = {
     9: 'major sixth',
     'a': 'minor seventh',     # 10
     'b': 'major seventh',     # 11
+    'c': 'major seventh',     # 12
+    'd': 'major seventh',     # 13
     'e': 'major ninth',       # 14
+    'f': 'major ninth',       # 15
+    'g': 'major ninth',       # 16
     'h': 'major eleventh',    # 17
+    'i': 'major eleventh',    # 18
+    'j': 'major eleventh',    # 19
+    'k': 'major eleventh',    # 20
     'l': 'major thirteenth',  # 21
+    'm': 'major thirteenth',  # 22
+    'n': 'major thirteenth',  # 23
 }
 
 SHARP_TO_FLAT = {

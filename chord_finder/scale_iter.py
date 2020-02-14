@@ -3,12 +3,13 @@
 
 
 class ScaleIter:
-    # Cosntructor
+    # Constructor
     def __init__(self, scale_obj, start, limit=0):
-        self.index = scale_obj.get_members().index(start)
         self.members = scale_obj.get_members()
+        self.index = self.members.index(start)
         self.total_iterations = 0
         self.limit = limit
+        self.distance_base = 0
 
     # Called when iteration is initialized
     def __iter__(self):
@@ -22,4 +23,9 @@ class ScaleIter:
             raise StopIteration
         if self.index > len(self.members) - 1:
             self.index = 0
-        return self.members[index]
+            # root to root is 12 semitones. this means we're wrapping
+            # around the scale
+            self.distance_base = 12
+        scale_member = self.members[index]
+        distance = scale_obj.get_member_distance(index)
+        return self.members[index], self.distance_base += ?

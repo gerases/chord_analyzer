@@ -13,11 +13,7 @@ def test_find_pitches_in_scale():
     pitches = ['c', 'e', 'g']
     scale = MajorScale('c', ENHARM_SHARP_MODE)
     result = find_pitches_in_scale(pitches, scale)
-    expected = [
-                '%s-%s-%s' % (
-                    m['scale_degree'],
-                    m['scale_member'],
-                    scale.get_member_distance(m['scale_member']))
+    expected = ['%s-%s-%s' % (m['degree'], m['member'], m['distance'])
                 for m in result]
     assert expected == ['1-c-0', '3-e-4', '5-g-7']
 
