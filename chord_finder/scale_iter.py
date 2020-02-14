@@ -27,10 +27,12 @@ class ScaleIter:
             raise StopIteration
         if self.index > len(self.members) - 1:
             self.index = 0
+            index = 0
             self.distance_base = 12
         member = self.members[index]
         self.index += 1
         member_distance = self.scale.get_member_distance(member)
+        # print(self.members)
         distance = self.distance_base + musical_to_dec(member_distance)
         self.distance_traveled = dec_to_musical(distance)
-        return self.members[index]
+        return member

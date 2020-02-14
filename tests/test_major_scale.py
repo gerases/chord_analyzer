@@ -66,3 +66,7 @@ def test_fit_pitches_to_scale():
                 '6-a-9',
                 '7-b-b'
                 ]
+
+    # c+ is not in the scale, so no matches should be returned
+    pitches = ['c+']
+    assert scale.fit_pitches_in_scale(pitches) == []
