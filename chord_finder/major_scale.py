@@ -4,6 +4,7 @@
 from chord_finder.utils import move_in_half_steps
 from chord_finder.utils import lookup_pitch
 from chord_finder.utils import musical_to_dec
+from chord_finder.utils import dec_to_musical
 from chord_finder.utils import spell_pitch_enharmonically
 from chord_finder.common import PITCHES
 from chord_finder.common import SHARP_KEYS
@@ -11,6 +12,7 @@ from chord_finder.common import FLAT_KEYS
 from chord_finder.common import ENHARM_SHARP_MODE
 from chord_finder.common import ENHARM_FLAT_MODE
 from chord_finder.common import MAX_DISTANCE
+from chord_finder.common import CHORD_PATTERNS
 from chord_finder.non_accidental_iter import NonAccidentalIter
 from chord_finder.scale_iter import ScaleIter
 
@@ -52,6 +54,32 @@ class MajorScale:
 
     def __str__(self):
         return "major scale %s: %s" % (self.root)
+
+    def identify_chord(self, pitches):
+        matches = self.fit_pitches_in_scale(pitches.copy())
+        if len(matches) == 0:
+            return None
+        distances = [str(match['distance']) for match in matches]
+        # if the root in the returned distance is not the first degree of
+        # the scale, we need to subtract the distance of this first chord
+        # member from the rest of the distances to get the pattern that can
+        # be looked up in CHORD_PATTERNS.
+        #
+        # For example:
+        #
+        # if the pitches are ['d', 'f', 'a'] and we're in the key of C, the
+        # distances are '2', '5', '9'. If we subtract 2 from 5 and 9, we'll
+        # get 3 and 7. '37' is the minor chord pattern in CHORD_PATTERNS.
+        pattern = [
+            str(dec_to_musical(
+                musical_to_dec(distance) - musical_to_dec(distances[0])
+                ))
+            for distance in distances[1:]]
+        pattern_str = ''.join(pattern)
+        if pattern_str not in CHORD_PATTERNS:
+            return None
+        chord = '%s %s' % (pitches[0].upper(), CHORD_PATTERNS[pattern_str])
+        return chord
 
     def convert_distances_to_piches(self):
         """Returns an enharomonic string representing the chord

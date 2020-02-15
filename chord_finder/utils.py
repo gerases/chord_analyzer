@@ -15,32 +15,6 @@ from chord_finder.common import MAX_DISTANCE
 # 3. then somehow we need to print them all if requested
 # 4. need scale iterator to look for matching chords
 
-DISTANCE_TO_NAME = {
-    1: 'minor second',
-    2: 'major second',
-    3: 'minor third',
-    4: 'major third',
-    5: 'perfect fourth',
-    6: 'diminished fifth',
-    7: 'perfect fifth',
-    8: 'minor sixth',
-    9: 'major sixth',
-    'a': 'minor seventh',     # 10
-    'b': 'major seventh',     # 11
-    'e': 'major ninth',       # 14
-    'h': 'major eleventh',    # 17
-    'l': 'major thirteenth',  # 21
-}
-
-SHARP_TO_FLAT = {
-    'c+': 'd-',
-    'd+': 'e-',
-    'e+': 'f-',
-    'f+': 'g-',
-    'g+': 'a-',
-    'a+': 'b-',
-}
-
 
 def spell_pitch_enharmonically(pitch, expected_base, mode):
     """
@@ -319,6 +293,10 @@ def print_chord_in_key_context(root, chord):
             print("%-13s" % colored(scale_member['pitch'], 'blue'), end="")
         else:
             print("%-4s" % scale_member['pitch'], end="")
+
+
+def str2list(string):
+    return string.split(' ')
 
 
 if __name__ == '__main__':

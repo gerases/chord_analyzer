@@ -5,6 +5,7 @@ import yaml
 from chord_finder.major_scale import MajorScale
 from chord_finder.common import ENHARM_SHARP_MODE, ENHARM_FLAT_MODE
 from chord_finder.utils import spell_pitch_enharmonically
+from chord_finder.utils import str2list
 
 
 def test_enharnomonic_spelling():
@@ -53,7 +54,8 @@ def test_member_to_distance():
 
 def test_fit_pitches_to_scale():
     scale = MajorScale('c', ENHARM_SHARP_MODE)
-    pitches = ['c', 'd', 'e', 'f', 'g', 'a', 'b']
+    pitches = ['c', 'd', 'e', 'f', 'g', 'a', 'b',
+               'c', 'd', 'e', 'f', 'g', 'a', 'b']
     matches = scale.fit_pitches_in_scale(pitches)
     expected = ['%s-%s-%s' % (m['degree'], m['pitch'], m['distance'])
                 for m in matches]
@@ -64,9 +66,27 @@ def test_fit_pitches_to_scale():
                 '4-f-5',
                 '5-g-7',
                 '6-a-9',
-                '7-b-b'
+                '7-b-b',
+                '8-c-c',   # 12
+                '9-d-e',   # 14
+                '10-e-g',  # 16
+                '11-f-h',  # 17
+                '12-g-j',  # 19
+                '13-a-l',  # 21
+                '14-b-n',  # 23
                 ]
 
     # c+ is not in the scale, so no matches should be returned
     pitches = ['c+']
     assert scale.fit_pitches_in_scale(pitches) == []
+
+
+def test_identify_chord():
+    scale = MajorScale('c', ENHARM_SHARP_MODE)
+    assert scale.identify_chord(str2list('c e g')) == 'C major'
+    assert scale.identify_chord(str2list('d f a')) == 'D minor'
+    assert scale.identify_chord(str2list('e g b')) == 'E minor'
+    assert scale.identify_chord(str2list('f a c')) == 'F major'
+    assert scale.identify_chord(str2list('g b d')) == 'G major'
+    assert scale.identify_chord(str2list('a c e')) == 'A minor'
+    assert scale.identify_chord(str2list('b d f')) == 'B diminished'

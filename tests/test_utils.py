@@ -1,11 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# from chord_finder.common import ENHARM_FLAT_MODE
-# from chord_finder.utils import distances_to_symbols, musical_to_dec
 from chord_finder.common import ENHARM_SHARP_MODE
 from chord_finder.utils import spell_pitch_enharmonically
+from chord_finder.utils import str2list
 from chord_finder.major_scale import MajorScale
+
+
+def test_str2list():
+    assert str2list('a b c') == ['a', 'b', 'c']
 
 
 def test_enharnomonic_spelling():

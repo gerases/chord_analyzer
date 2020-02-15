@@ -47,3 +47,20 @@ SHARP_TO_FLAT = {
     'g+': 'a-',
     'a+': 'b-',
 }
+
+CHORD_PATTERNS = {
+    '47': 'major',
+    '37': 'minor',
+    '48': 'augmented',
+    '36': 'diminished',
+    '27': 'sus2',
+    '57': 'sus4',
+    '47a': 'dominant 7th',
+    '47b': 'major 7th',
+    '37a': 'minor 7th',
+    '36a': 'half diminished 7th',
+    '369': 'diminished 7th',
+    '47e': 'major 9th',
+    '47h': 'major 11th',
+    '47l': 'major 13th',
+}
