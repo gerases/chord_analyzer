@@ -90,3 +90,16 @@ def test_identify_chord():
     assert scale.identify_chord(str2list('g b d')) == 'G major'
     assert scale.identify_chord(str2list('a c e')) == 'A minor'
     assert scale.identify_chord(str2list('b d f')) == 'B diminished'
+
+
+def test_get_triads():
+    scale = MajorScale('c', ENHARM_SHARP_MODE)
+    assert scale.get_all_triads() == [
+        'ceg [C major]',
+        'dfa [D minor]',
+        'egb [E minor]',
+        'fac [F major]',
+        'gbd [G major]',
+        'ace [A minor]',
+        'bdf [B diminished]',
+    ]

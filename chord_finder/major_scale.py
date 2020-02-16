@@ -55,6 +55,19 @@ class MajorScale:
     def __str__(self):
         return "major scale %s: %s" % (self.root)
 
+    def get_all_triads(self):
+        root_iter = ScaleIter(self, self.get_root(), limit=7)
+        third_iter = ScaleIter(self, self.get_members()[2])
+        fifth_iter = ScaleIter(self, self.get_members()[4])
+        result = []
+        for root, third, fifth in zip(root_iter, third_iter, fifth_iter):
+            result.append("%s%s%s [%s]" %
+                          (root,
+                           third,
+                           fifth,
+                           self.identify_chord([root, third, fifth])))
+        return result
+
     def identify_chord(self, pitches):
         matches = self.fit_pitches_in_scale(pitches.copy())
         if len(matches) == 0:
