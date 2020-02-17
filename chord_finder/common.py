@@ -64,3 +64,13 @@ CHORD_PATTERNS = {
     '47h': 'major 11th',
     '47l': 'major 13th',
 }
+
+DEC_TO_ROMAN = {
+    1: 'i',
+    2: 'ii',
+    3: 'iii',
+    4: 'iv',
+    5: 'v',
+    6: 'vi',
+    7: 'vii',
+}

@@ -13,6 +13,7 @@ from chord_finder.common import ENHARM_SHARP_MODE
 from chord_finder.common import ENHARM_FLAT_MODE
 from chord_finder.common import MAX_DISTANCE
 from chord_finder.common import CHORD_PATTERNS
+from chord_finder.common import DEC_TO_ROMAN
 from chord_finder.non_accidental_iter import NonAccidentalIter
 from chord_finder.scale_iter import ScaleIter
 
@@ -65,11 +66,18 @@ class MajorScale:
         third_iter = ScaleIter(self, self.get_members()[2])
         fifth_iter = ScaleIter(self, self.get_members()[4])
         result = []
+        degree = 1
         for root, third, fifth in zip(root_iter, third_iter, fifth_iter):
-            triad_type = self.identify_chord([root, third, fifth])
+            name = self.identify_chord([root, third, fifth])
+            roman = DEC_TO_ROMAN[degree]
+            if degree in [1, 4, 5]:
+                roman = roman.upper()
             result.append({'triad': "%s%s%s" % (root, third, fifth),
-                           'type': triad_type,
+                           'name': name,
+                           'degree': degree,
+                           'roman': roman,
                            })
+            degree += 1
         return result
 
     def identify_chord(self, pitches):
@@ -161,7 +169,8 @@ def main():
         print("=========== key of %s ================" % scale.get_root())
         triads = scale.get_all_triads()
         for triad in triads:
-            print("\t%-20s%s" % (triad['triad'], triad['type']))
+            print("\t%-5s %-20s%s" %
+                  (triad['roman'], triad['triad'], triad['name']))
 
 
 if __name__ == '__main__':
