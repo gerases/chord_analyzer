@@ -32,8 +32,9 @@ def build_major_scales():
 class MajorScale:
     def __init__(self, root, mode=None):
         """
-         W W H W W W H
+              W W H W W W H
         e.g: c d e f g a b c
+              2 4 5 7 9 b c
         """
         self.distances = ['2', '4', '5', '7', '9', 'b']
         if not mode:
