@@ -29,12 +29,17 @@ def build_major_scales():
 
 
 class MajorScale:
-    def __init__(self, root, mode):
+    def __init__(self, root, mode=None):
         """
          W W H W W W H
         e.g: c d e f g a b c
         """
         self.distances = ['2', '4', '5', '7', '9', 'b']
+        if not mode:
+            if root in ['c', 'g', 'd', 'a', 'e', 'b', 'f+']:
+                mode = ENHARM_SHARP_MODE
+            else:
+                mode = ENHARM_FLAT_MODE
         self.mode = mode
         self.root = root
         self.member_to_distance = {}
@@ -61,11 +66,10 @@ class MajorScale:
         fifth_iter = ScaleIter(self, self.get_members()[4])
         result = []
         for root, third, fifth in zip(root_iter, third_iter, fifth_iter):
-            result.append("%s%s%s [%s]" %
-                          (root,
-                           third,
-                           fifth,
-                           self.identify_chord([root, third, fifth])))
+            triad_type = self.identify_chord([root, third, fifth])
+            result.append({'triad': "%s%s%s" % (root, third, fifth),
+                           'type': triad_type,
+                           })
         return result
 
     def identify_chord(self, pitches):
@@ -148,11 +152,16 @@ def main():
     non_accident_iter = NonAccidentalIter('c', limit=7)
     major_keys = []
     for root in non_accident_iter:
-        scale = MajorScale(root, ENHARM_SHARP_MODE)
+        scale = MajorScale(root)
         major_keys.append(scale)
         print("key of %s: " % root, end="")
         print(scale.identify_chord(['a', 'c', 'e']))
-    # print(major_keys)
+
+    for scale in major_keys:
+        print("=========== key of %s ================" % scale.get_root())
+        triads = scale.get_all_triads()
+        for triad in triads:
+            print("\t%-20s%s" % (triad['triad'], triad['type']))
 
 
 if __name__ == '__main__':
