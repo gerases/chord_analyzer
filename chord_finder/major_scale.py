@@ -142,3 +142,18 @@ class MajorScale:
         if len(matches) != len_pitches_orig:
             return []
         return matches
+
+
+def main():
+    non_accident_iter = NonAccidentalIter('c', limit=7)
+    major_keys = []
+    for root in non_accident_iter:
+        scale = MajorScale(root, ENHARM_SHARP_MODE)
+        major_keys.append(scale)
+        print("key of %s: " % root, end="")
+        print(scale.identify_chord(['a', 'c', 'e']))
+    # print(major_keys)
+
+
+if __name__ == '__main__':
+    main()
