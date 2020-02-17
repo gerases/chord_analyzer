@@ -72,7 +72,7 @@ class MajorScale:
             roman = DEC_TO_ROMAN[degree]
             if degree in [1, 4, 5]:
                 roman = roman.upper()
-            result.append({'triad': "%s%s%s" % (root, third, fifth),
+            result.append({'pitches': "%s%s%s" % (root, third, fifth),
                            'name': name,
                            'degree': degree,
                            'roman': roman,
@@ -170,7 +170,7 @@ def main():
         triads = scale.get_all_triads()
         for triad in triads:
             print("\t%-5s %-20s%s" %
-                  (triad['roman'], triad['triad'], triad['name']))
+                  (triad['roman'], triad['pitches'], triad['name']))
 
 
 if __name__ == '__main__':

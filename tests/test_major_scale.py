@@ -31,18 +31,17 @@ def test_build_major_sharp_scales():
 
 
 def test_build_major_flat_scales():
-    mode = ENHARM_FLAT_MODE
     with open('tests/data/major_flat_scales.yaml') as handle:
         data = yaml.load(handle, Loader=yaml.FullLoader)
 
     scales = data['scales']
     for root in scales:
-        scale = MajorScale(root, mode)
+        scale = MajorScale(root)
         assert scale.get_members() == scales[root]
 
 
 def test_member_to_distance():
-    scale = MajorScale('c', ENHARM_SHARP_MODE)
+    scale = MajorScale('c')
     assert scale.get_member_distance('c') == '0'
     assert scale.get_member_distance('d') == '2'
     assert scale.get_member_distance('e') == '4'
@@ -53,7 +52,7 @@ def test_member_to_distance():
 
 
 def test_fit_pitches_to_scale():
-    scale = MajorScale('c', ENHARM_SHARP_MODE)
+    scale = MajorScale('c')
     pitches = ['c', 'd', 'e', 'f', 'g', 'a', 'b',
                'c', 'd', 'e', 'f', 'g', 'a', 'b']
     matches = scale.fit_pitches_in_scale(pitches)
@@ -82,7 +81,7 @@ def test_fit_pitches_to_scale():
 
 
 def test_identify_chord():
-    scale = MajorScale('c', ENHARM_SHARP_MODE)
+    scale = MajorScale('c')
     assert scale.identify_chord(str2list('c e g')) == 'C major'
     assert scale.identify_chord(str2list('d f a')) == 'D minor'
     assert scale.identify_chord(str2list('e g b')) == 'E minor'
@@ -93,13 +92,15 @@ def test_identify_chord():
 
 
 def test_get_triads():
-    scale = MajorScale('c', ENHARM_SHARP_MODE)
-    assert scale.get_all_triads() == [
-        'ceg [C major]',
-        'dfa [D minor]',
-        'egb [E minor]',
-        'fac [F major]',
-        'gbd [G major]',
-        'ace [A minor]',
-        'bdf [B diminished]',
+    scale = MajorScale('c')
+    triads = ["%s %s [%s]" % (triad['roman'], triad['pitches'], triad['name'])
+              for triad in scale.get_all_triads()]
+    assert triads == [
+        'I ceg [C major]',
+        'ii dfa [D minor]',
+        'iii egb [E minor]',
+        'IV fac [F major]',
+        'V gbd [G major]',
+        'vi ace [A minor]',
+        'vii bdf [B diminished]',
     ]
