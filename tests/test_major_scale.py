@@ -70,13 +70,13 @@ def test_fit_pitches_to_scale():
 
 def test_identify_chord():
     scale = MajorScale('c')
-    assert scale.identify_chord(str2list('c e g')) == 'C major'
-    assert scale.identify_chord(str2list('d f a')) == 'D minor'
-    assert scale.identify_chord(str2list('e g b')) == 'E minor'
-    assert scale.identify_chord(str2list('f a c')) == 'F major'
-    assert scale.identify_chord(str2list('g b d')) == 'G major'
-    assert scale.identify_chord(str2list('a c e')) == 'A minor'
-    assert scale.identify_chord(str2list('b d f')) == 'B diminished'
+    assert scale.identify_chord(str2list('c e g'))[0] == 'C major'
+    assert scale.identify_chord(str2list('d f a'))[0] == 'D minor'
+    assert scale.identify_chord(str2list('e g b'))[0] == 'E minor'
+    assert scale.identify_chord(str2list('f a c'))[0] == 'F major'
+    assert scale.identify_chord(str2list('g b d'))[0] == 'G major'
+    assert scale.identify_chord(str2list('a c e'))[0] == 'A minor'
+    assert scale.identify_chord(str2list('b d f'))[0] == 'B diminished'
 
 
 def test_get_triads():
