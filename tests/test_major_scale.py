@@ -4,17 +4,17 @@
 import yaml
 from chord_finder.major_scale import MajorScale
 from chord_finder.common import ENHARM_SHARP_MODE
+from chord_finder.common import ENHARM_FLAT_MODE
 from chord_finder.utils import str2list
 
 
 def test_build_major_sharp_scales():
-    mode = ENHARM_SHARP_MODE
     with open('tests/data/major_sharp_scales.yaml') as handle:
         data = yaml.load(handle, Loader=yaml.FullLoader)
 
     scales = data['scales']
     for root in scales:
-        scale = MajorScale(root, mode)
+        scale = MajorScale(root, ENHARM_SHARP_MODE)
         assert scale.get_members() == scales[root]
 
 
@@ -24,7 +24,7 @@ def test_build_major_flat_scales():
 
     scales = data['scales']
     for root in scales:
-        scale = MajorScale(root)
+        scale = MajorScale(root, ENHARM_FLAT_MODE)
         assert scale.get_members() == scales[root]
 
 
