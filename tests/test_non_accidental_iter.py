@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# import pytest
-from chord_finder.NonAccidentalIter import NonAccidentalIter
+from chord_finder.non_accidental_iter import NonAccidentalIter
 
 
 def test_less_than_7():
