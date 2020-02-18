@@ -10,6 +10,9 @@ from chord_finder.utils import spell_pitch_enharmonically
 from chord_finder.common import PITCHES
 from chord_finder.common import MAX_DISTANCE
 from chord_finder.common import CHORD_PATTERNS
+from chord_finder.common import DEC_TO_ROMAN
+from chord_finder.non_accidental_iter import NonAccidentalIter
+from chord_finder.scale_iter import ScaleIter
 
 
 class Scale:
@@ -105,4 +108,23 @@ class Scale:
         if pattern_str not in CHORD_PATTERNS:
             return None
         chord = '%s %s' % (pitches[0].upper(), CHORD_PATTERNS[pattern_str])
-        return chord
+        return chord, CHORD_PATTERNS[pattern_str]
+
+    def get_all_triads(self):
+        root_iter = ScaleIter(self, self.get_root(), limit=7)
+        third_iter = ScaleIter(self, self.get_members()[2])
+        fifth_iter = ScaleIter(self, self.get_members()[4])
+        result = []
+        degree = 1
+        for root, third, fifth in zip(root_iter, third_iter, fifth_iter):
+            name, chord_type = self.identify_chord([root, third, fifth])
+            roman = DEC_TO_ROMAN[degree]
+            if 'major' in chord_type:
+                roman = roman.upper()
+            result.append({'pitches': "%s%s%s" % (root, third, fifth),
+                           'name': name,
+                           'degree': degree,
+                           'roman': roman,
+                           })
+            degree += 1
+        return result

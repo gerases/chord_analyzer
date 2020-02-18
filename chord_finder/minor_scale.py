@@ -4,9 +4,7 @@
 from scale import Scale
 from chord_finder.common import ENHARM_SHARP_MODE
 from chord_finder.common import ENHARM_FLAT_MODE
-from chord_finder.common import DEC_TO_ROMAN
 from chord_finder.non_accidental_iter import NonAccidentalIter
-from chord_finder.scale_iter import ScaleIter
 
 
 class MinorScale(Scale):
@@ -27,25 +25,6 @@ class MinorScale(Scale):
 
     def __str__(self):
         return "minor scale %s: %s" % (self.root)
-
-    def get_all_triads(self):
-        root_iter = ScaleIter(self, self.get_root(), limit=7)
-        third_iter = ScaleIter(self, self.get_members()[2])
-        fifth_iter = ScaleIter(self, self.get_members()[4])
-        result = []
-        degree = 1
-        for root, third, fifth in zip(root_iter, third_iter, fifth_iter):
-            name = self.identify_chord([root, third, fifth])
-            roman = DEC_TO_ROMAN[degree]
-            if degree in [1, 4, 5]:
-                roman = roman.upper()
-            result.append({'pitches': "%s%s%s" % (root, third, fifth),
-                           'name': name,
-                           'degree': degree,
-                           'roman': roman,
-                           })
-            degree += 1
-        return result
 
 
 def main():

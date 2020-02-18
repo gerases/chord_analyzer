@@ -3,7 +3,7 @@
 
 import yaml
 from chord_finder.major_scale import MajorScale
-from chord_finder.common import ENHARM_SHARP_MODE, ENHARM_FLAT_MODE
+from chord_finder.common import ENHARM_SHARP_MODE
 from chord_finder.utils import spell_pitch_enharmonically
 from chord_finder.utils import str2list
 
