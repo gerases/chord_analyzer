@@ -4,19 +4,7 @@
 import yaml
 from chord_finder.major_scale import MajorScale
 from chord_finder.common import ENHARM_SHARP_MODE
-from chord_finder.utils import spell_pitch_enharmonically
 from chord_finder.utils import str2list
-
-
-def test_enharnomonic_spelling():
-    # 'c' written in terms of 'b' is 'b+'
-    assert spell_pitch_enharmonically('c', 'b', ENHARM_SHARP_MODE) == 'b+'
-
-    # 'c' written in terms of 'a' is 'a+++'
-    assert spell_pitch_enharmonically('c', 'a', ENHARM_SHARP_MODE) == 'a+++'
-
-    # 'f' written in terms of 'e' is 'e+'
-    assert spell_pitch_enharmonically('f', 'e', ENHARM_SHARP_MODE) == 'e+'
 
 
 def test_build_major_sharp_scales():
