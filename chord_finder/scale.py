@@ -128,3 +128,8 @@ class Scale:
                            })
             degree += 1
         return result
+
+    def print(self, color=True):
+        for member in self.scale_members:
+            print('%-3s' % member, end="")
+        print()

@@ -16,7 +16,7 @@ class MajorScale(Scale):
         """
         distances = ['2', '4', '5', '7', '9', 'b']
         if not mode:
-            if root in ['c', 'g', 'd', 'a', 'e', 'b', 'f+']:
+            if root in ['c', 'g', 'd', 'a', 'e', 'b'] or '+' in root:
                 mode = ENHARM_SHARP_MODE
             else:
                 mode = ENHARM_FLAT_MODE

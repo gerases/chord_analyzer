@@ -17,7 +17,7 @@ class MinorScale(Scale):
         """
         distances = ['2', '3', '5', '7', '8', 'a']
         if not mode:
-            if root in ['a', 'e', 'b', 'f+', 'c+', 'g+', 'd+']:
+            if root in ['a', 'e', 'b'] or root[1] == '+':
                 mode = ENHARM_SHARP_MODE
             else:
                 mode = ENHARM_FLAT_MODE

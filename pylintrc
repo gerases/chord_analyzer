@@ -1,3 +1,3 @@
 [MESSAGES CONTROL]
 
-disable=superfluous-parens,missing-docstring,old-style-class,no-self-use,import-error,no-name-in-module,no-else-return,fixme,invalid-name,too-few-public-methods
+disable=superfluous-parens,missing-docstring,old-style-class,no-self-use,import-error,no-name-in-module,no-else-return,fixme,invalid-name,too-few-public-methods,redefined-outer-name
