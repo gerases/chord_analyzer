@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 # import pytest
-from chord_finder.scale_iter import ScaleIter
-from chord_finder.major_scale import MajorScale
+from chord_finder.iterators.scale_iter import ScaleIter
+from chord_finder.scales.major_scale import MajorScale
 from chord_finder.common import ENHARM_FLAT_MODE
 
 

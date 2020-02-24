@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import yaml
-from chord_finder.major_scale import MajorScale
+from chord_finder.scales.major_scale import MajorScale
 from chord_finder.common import ENHARM_SHARP_MODE
 from chord_finder.common import ENHARM_FLAT_MODE
 from chord_finder.utils import str2list
