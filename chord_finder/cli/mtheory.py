@@ -4,6 +4,7 @@
 import argparse
 from chord_finder.scales.major_scale import MajorScale
 from chord_finder.scales.minor_scale import MinorScale
+from chord_finder.iterators.fifths_iter import FifthsIter
 
 
 def print_scale(args):
@@ -16,12 +17,9 @@ def print_scale(args):
 
 
 def print_circle_of_5ths():
-    print("=> Circle of 5ths")
-    for scale in ['c', 'g', 'd', 'a', 'e', 'b', 'f+']:
-        MajorScale(scale).print()
-    print("=> Circle of 4ths")
-    for scale in ['f', 'b-', 'e-', 'a-', 'd-', 'g-']:
-        MajorScale(scale).print()
+    fifths_iter = FifthsIter('c', 12)
+    for fifth in fifths_iter:
+        MajorScale(fifth).print()
 
 
 if __name__ == '__main__':

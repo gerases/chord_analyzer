@@ -11,8 +11,8 @@ from chord_finder.common import PITCHES
 from chord_finder.common import MAX_DISTANCE
 from chord_finder.common import CHORD_PATTERNS
 from chord_finder.common import DEC_TO_ROMAN
-from chord_finder.non_accidental_iter import NonAccidentalIter
-from chord_finder.scale_iter import ScaleIter
+from chord_finder.iterators.non_accidental_iter import NonAccidentalIter
+from chord_finder.iterators.scale_iter import ScaleIter
 
 
 class Scale:
@@ -131,5 +131,5 @@ class Scale:
 
     def print(self, color=True):
         for member in self.scale_members:
-            print('%-3s' % member, end="")
+            print('%-7s' % member, end="")
         print()

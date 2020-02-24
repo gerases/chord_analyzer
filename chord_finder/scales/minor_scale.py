@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from scale import Scale
+from chord_finder.scales.scale import Scale
 from chord_finder.common import ENHARM_SHARP_MODE
 from chord_finder.common import ENHARM_FLAT_MODE
-from chord_finder.non_accidental_iter import NonAccidentalIter
+from chord_finder.iterators.non_accidental_iter import NonAccidentalIter
 
 
 class MinorScale(Scale):

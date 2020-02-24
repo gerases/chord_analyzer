@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from chord_finder.utils import move_in_half_steps
+from chord_finder.iterators.harmonic_iter import HarmonicIter
 
 
 class FifthsIter:
@@ -16,9 +16,11 @@ class FifthsIter:
         return self
 
     def __next__(self):
+        current_5th = self.current_5th
         self.total_iterations += 1
         if self.limit > 0 and self.total_iterations > self.limit:
             raise StopIteration
-        pitch = move_in_half_steps(self.current_5th, '+' * 7)
-        self.current_5th = pitch
-        return pitch
+        harmonic_iter = HarmonicIter(self.current_5th, 8)
+        for pitch in harmonic_iter:
+            self.current_5th = pitch
+        return current_5th
