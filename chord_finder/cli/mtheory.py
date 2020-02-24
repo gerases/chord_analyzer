@@ -19,7 +19,7 @@ def print_scale(args):
 def print_circle_of_5ths():
     fifths_iter = FifthsIter('c', 12)
     for fifth in fifths_iter:
-        MajorScale(fifth).print()
+        MajorScale(fifth, mode='auto').print()
 
 
 if __name__ == '__main__':

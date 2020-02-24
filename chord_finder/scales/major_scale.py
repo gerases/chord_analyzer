@@ -4,6 +4,7 @@
 from chord_finder.scales.scale import Scale
 from chord_finder.common import ENHARM_SHARP_MODE
 from chord_finder.common import ENHARM_FLAT_MODE
+from chord_finder.common import SHARP_TO_FLAT
 from chord_finder.iterators.non_accidental_iter import NonAccidentalIter
 
 
@@ -15,11 +16,18 @@ class MajorScale(Scale):
               2 4 5 7 9 b c
         """
         distances = ['2', '4', '5', '7', '9', 'b']
-        if not mode:
+        if mode == 'auto':
+            if root in ['c', 'g', 'd', 'a', 'e', 'b', 'f+']:
+                mode = ENHARM_SHARP_MODE
+            else:
+                mode = ENHARM_FLAT_MODE
+                root = SHARP_TO_FLAT.get(root, root)
+        elif mode is None:
             if root in ['c', 'g', 'd', 'a', 'e', 'b'] or '+' in root:
                 mode = ENHARM_SHARP_MODE
             else:
                 mode = ENHARM_FLAT_MODE
+                root = SHARP_TO_FLAT.get(root, root)
         super(MajorScale, self).__init__(root, mode, distances)
 
     def __str__(self):
